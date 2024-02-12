@@ -1,4 +1,4 @@
-from .encoder_decoder import to_numeric, to_categorical
+from .encoder_decoder import to_numeric, to_categorical, to_categorical_binary, to_numeric_binary
 from .eval_metrics import categorical_accuracy_continuous_tolerance_score, get_acc_and_bac, feature_wise_accuracy_score, batch_feature_wise_accuracy_score
 from .gmm_pdf import gmm_pdf, gmm_pdf_batch
 from .matching import match_reconstruction_ground_truth

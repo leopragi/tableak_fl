@@ -72,6 +72,33 @@ class FullyConnectedTrainer:
         self.device = device
         self.verbose = verbose
 
+
+    def average_gradients(self, model, gradient_list):
+        """
+        Average gradients from a list of gradient tensors.
+
+        Args:
+            model: PyTorch model with the same architecture as the models
+                used by clients.
+            gradient_list: List of gradient tensors to be averaged.
+
+        Returns:
+            Averaged gradient tensor.
+        """
+        # Initialize a gradient accumulator with zeros
+        average_gradient = [torch.zeros_like(param) for param in model.parameters()]
+
+        # Sum up the gradients from each client
+        for gradients in gradient_list:
+            for i, param in enumerate(gradients):
+                average_gradient[i] += param
+
+        # Calculate the average by dividing by the number of clients
+        batch_len = len(gradient_list)
+        average_gradient = [param / batch_len for param in average_gradient]
+
+        return average_gradient
+
     # TODO: I do not think it was very smart from my side to put the optimizer into the object with assigned weights but
     #  then have the network only here. This workflow needs some revision (its might worth it to just simply turn it
     #  into a lone-standing function).
@@ -110,6 +137,8 @@ class FullyConnectedTrainer:
 
         accs, baccs = [], []
         net.train()
+
+        all_grads = []
         for epoch in range(n_epochs):
             running_loss = []
             for i in range(int(np.ceil(self.data_x.size()[0] / batch_size))):
@@ -122,6 +151,9 @@ class FullyConnectedTrainer:
                 outputs = net(inputs)
                 loss = self.criterion(outputs, labels)
                 loss.backward()
+
+                all_grads.append([param.grad.detach().clone() for param in net.parameters()])
+
                 self.optimizer.step()
 
                 running_loss += [loss.item()]
@@ -132,8 +164,13 @@ class FullyConnectedTrainer:
                 acc, bac = get_acc_and_bac(net, testx, testy)
                 accs.append(acc)
                 baccs.append(bac)
+
+        averaged_grads = self.average_gradients(net, all_grads)
+
         if self.verbose:
             print('Finished Training')
         if testx is not None and testy is not None:
             return accs, baccs
+        
+        return averaged_grads
 

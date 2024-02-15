@@ -1,18 +1,18 @@
 import torch
 import numpy as np
 import pandas as pd
-from .base_dataset import BaseDataset
+from .base_binary_dataset import BinaryBaseDataset
 import sys
 
 sys.path.append("..")
-from utils import to_numeric, to_categorical
+from utils import to_numeric_binary, to_categorical_binary
 from sklearn.model_selection import train_test_split
 
 
-class Lawschool(BaseDataset):
+class LawschoolBinary(BinaryBaseDataset):
 
-    def __init__(self, name='Lawschool', train_test_ratio=0.2, single_bit_binary=False, device='cpu', random_state=42):
-        super(Lawschool, self).__init__(name=name, device=device, random_state=random_state)
+    def __init__(self, name='LawschoolBinary', train_test_ratio=0.2, single_bit_binary=False, device='cpu', random_state=42):
+        super(LawschoolBinary, self).__init__(name=name, device=device, random_state=random_state)
 
         self.train_test_ratio = train_test_ratio
 
@@ -48,10 +48,9 @@ class Lawschool(BaseDataset):
 
         self.raw = data_df
 
-
         # convert to numeric
         data = data_df.to_numpy()
-        data_num = (to_numeric(data, self.features, label=self.label, single_bit_binary=self.single_bit_binary)).astype(np.float32)
+        data_num = (to_numeric_binary(data, self.features, label=self.label, single_bit_binary=self.single_bit_binary)).astype(np.float32)
 
         # split labels and features
         X, y = data_num[:, :-1], data_num[:, -1]
@@ -110,7 +109,7 @@ class Lawschool(BaseDataset):
         """
         if standardized:
             batch = self.de_standardize(batch)
-        return to_categorical(batch.clone().detach().cpu(), self.train_features,
+        return to_categorical_binary(batch.clone().detach().cpu(), self.train_features,
                               single_bit_binary=self.single_bit_binary, nearest_int=False)
 
     def _calculate_categorical_feature_distributions_and_continuous_bounds(self):

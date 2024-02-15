@@ -1,0 +1,37 @@
+=============ADULT (Binary)===============
+Number of dimensions/features after encoding: (32561, 36)
+Accuracy: 0.8635
+Classification Report:
+              precision    recall  f1-score 
+
+       <=50K       0.89      0.93      0.91
+        >50K       0.76      0.64      0.69
+
+
+=============ADULT (One-hot)===============
+Number of dimensions/features after encoding: (32561, 108)
+Accuracy: 0.8592
+Classification Report:
+              precision    recall  f1-score
+
+       <=50K       0.89      0.93      0.91
+        >50K       0.74      0.64      0.69
+
+
+=============Lawschool (Binary)===============
+Number of dimensions/features after encoding: (96584, 17)
+Accuracy: 0.8796
+Classification Report:
+              precision    recall  f1-score
+
+         0.0       0.91      0.93      0.92
+         1.0       0.79      0.74      0.76
+
+=============Lawschool (One-hot)===============
+Number of dimensions/features after encoding: (96584, 39)
+Accuracy: 0.8809
+Classification Report:
+              precision    recall  f1-score
+
+         0.0       0.91      0.93      0.92
+         1.0       0.79      0.74      0.77

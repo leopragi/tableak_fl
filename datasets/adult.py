@@ -53,6 +53,8 @@ class ADULT(BaseDataset):
         train_data_df = pd.read_csv('datasets/ADULT/adult.data', delimiter=', ', names=list(self.features.keys()), engine='python')
         test_data_df = pd.read_csv('datasets/ADULT/adult.test', delimiter=', ', names=list(self.features.keys()), skiprows=1, engine='python')
 
+        self.raw = train_data_df
+
         train_data = train_data_df.to_numpy()
         test_data = test_data_df.to_numpy()
 

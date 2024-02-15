@@ -59,6 +59,9 @@ class INSURANCE(BaseDataset):
         self.train_features = {key: self.features[key] for key in self.features.keys() if key != self.label}
 
         data_df = pd.read_csv('datasets/INSURANCE/Insurance_claims.csv', delimiter=',', names=list(self.features.keys()), skiprows=1, engine='python')
+
+        self.raw = data_df
+
         data = data_df.to_numpy()
 
         data_num = to_numeric(data, self.features, label=self.label, single_bit_binary=self.single_bit_binary)

@@ -14,3 +14,5 @@ dependencies:
   - pytorch=1.6.0
   - torchvision=0.7.0
   - category_encoders
+  - asyncio
+  - catboost
